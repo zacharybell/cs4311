@@ -796,6 +796,12 @@
       </object>
     </child>
   </object>
+  <object class="GtkTreeStore" id="session_view_store">
+    <columns>
+      <!-- column-name workspace -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkDialog" id="tag_overlay">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
@@ -1218,29 +1224,18 @@ Description</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="workspace_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Workspace X</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkScrolledWindow">
+                    <property name="height_request">380</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="shadow_type">in</property>
                     <child>
-                      <object class="GtkTreeView" id="workspace_tree">
+                      <object class="GtkTreeView" id="session_view_tree">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="margin_bottom">178</property>
+                        <property name="model">session_view_store</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
