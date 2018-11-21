@@ -1,4 +1,4 @@
-def convert_pcap_to_pdml(src: str, dest:str) -> int:
+def convert_pcap_to_pdml(src, dest): # type: (str, str) -> int
     """ Converts a PCAP file to PDML using TShark
 
     Args:
@@ -11,5 +11,5 @@ def convert_pcap_to_pdml(src: str, dest:str) -> int:
     
     import subprocess
 
-    args = f'tshark -r {src} -T pdml > {dest}'
+    args = 'tshark -r {} -T pdml > {}'.format(src, dest)
     return subprocess.call(args, shell=True)
