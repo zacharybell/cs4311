@@ -1,8 +1,4 @@
-# from pdml import PDML
-
-import xml.etree.ElementTree as ElementTree
-
-def convert_pcap_to_pdml(src, dest): # type: (str, str) -> int
+def convert_pcap_to_pdml(src: str, dest: str) -> int:
     """ Converts a PCAP file to PDML using TShark
 
     Args:
