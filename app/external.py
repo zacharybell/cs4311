@@ -1,3 +1,8 @@
+from xml.etree import ElementTree
+
+from . import pdml
+
+
 def convert_pcap_to_pdml(src: str, dest: str) -> int:
     """ Converts a PCAP file to PDML using TShark
 
@@ -11,11 +16,11 @@ def convert_pcap_to_pdml(src: str, dest: str) -> int:
     
     import subprocess
 
-    args = 'tshark -r {} -T pdml > {}'.format(src, dest)
+    args = f'tshark -r {src} -T pdml > {dest}'
     return subprocess.call(args, shell=True)
 
 
-def parse_pdml(file): # type: (str) -> PDML
+def parse_pdml(file: str) -> pdml.Pdml: # type: (str) -> PDML
     
     pdml_tree = ElementTree.parse(file)
 

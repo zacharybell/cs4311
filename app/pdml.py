@@ -1,15 +1,15 @@
 from datetime import datetime
+from xml.etree import ElementTree
 import re
 
-class PDML():
-
+class Pdml():
 
     __STAGE = ['setup', 'analysis', 'sequencing', 'generation']
 
 
     def __init__(self, date, creator, stage=0):
         
-        assert stage >= 0 and stage < len(PDML.__STAGE)
+        assert stage >= 0 and stage < len(Pdml.__STAGE)
         
         self.stage = stage
         self.name = ''
@@ -45,7 +45,7 @@ class PDML():
             Exception: If the stage doesn't exist.
         """
 
-        if self.stage >= len(PDML.__STAGE) - 1:
+        if self.stage >= len(Pdml.__STAGE) - 1:
             raise Exception('Attempting to reach stage that doesn\'t exist!')
         self.stage = self.stage + 1
 
@@ -63,7 +63,7 @@ class PDML():
 
 
     @staticmethod
-    def __create_datetime(date_time_str): # type: (str) -> datetime
+    def __create_datetime(date_time_str: str) -> datetime:
         """Takes a string containing the date and time and creates a datetime object.
 
         The input string must contain the month (MMM), date (DD), year (YYYY), and 
@@ -103,7 +103,7 @@ class PDML():
    
 
     @staticmethod
-    def convert_element_to_pdml(xml_element): # type: (Element) -> PDML
+    def convert_element_to_pdml(xml_element: ElementTree.Element) -> Pdml:
         """Converts an XML tree element to a PDML object.
 
         This function can be used by an xml parser to efficiently create PDML objects 
@@ -113,7 +113,7 @@ class PDML():
             Element: an xml element containing attributes that can be used to create a pdml object
         
         Returns:
-            A constructed pdml object.
+            Pdml: A constructed pdml object.
         
         Raises:
             ValueError: if the XML element doesn't contain the proper attributes to construct a PDML object
@@ -121,12 +121,12 @@ class PDML():
 
         try:
             assert xml_element.tag == 'pdml', 'Not a PDML element!'
-            date = PDML.__create_datetime(xml_element.attr['time'])
+            date = Pdml.__create_datetime(xml_element.attr['time'])
             if 'stage' in xml_element.attr:
                 stage = int(xml_element.attr['stage'])
             else:
                 stage = 0
-            pdml = PDML(date, xml_element.attr['creator'], stage)
+            pdml = Pdml(date, xml_element.attr['creator'], stage)
             return pdml
         except AssertionError | KeyError:
             raise ValueError('malformed XML Element')
