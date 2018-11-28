@@ -1,13 +1,21 @@
 from datetime import datetime
 from xml.etree import ElementTree
 import re
+from typing import List
+
+class Packet():
+    
+    def __init__(self, name, size):
+        self.name = name
+        self.size = size    # might be determined through computation
+        self.protocols = []
 
 class Pdml():
 
     __STAGE = ['setup', 'analysis', 'sequencing', 'generation']
 
 
-    def __init__(self, date, creator, stage=0):
+    def __init__(self, date: datetime, creator: str, stage=0):
         
         assert stage >= 0 and stage < len(Pdml.__STAGE)
         
@@ -18,27 +26,35 @@ class Pdml():
         self.creator = creator
         self.packets = []
 
+    @property
+    def name(self) -> str:
+        return self._name
 
-    @property.setter
-    def name(self, name):
-        self.name = name
+    @name.setter
+    def name(self, name: str) -> None:
+        self._name = name
 
+    @property
+    def description(self) -> str:
+        return self._description
 
-    @property.setter
-    def description(self, description):
-        self.description = description
+    @description.setter
+    def description(self, description: str) -> None:
+        self._description = description
 
+    @property
+    def packets(self) -> List[Packet]:
+        return self._packets
 
-    @property.setter
-    def packets(self, packets):
-        self.packets = packets
+    @packets.setter
+    def packets(self, packets: List[Packet]) -> None:
+        self._packets = packets
     
-
-    def add_packet(self, packet):
+    def add_packet(self, packet: Packet) -> None:
         self.packets.append(packet)
 
 
-    def next_stage(self):
+    def next_stage(self) -> None:
         """Sets moves the stage of the PDML to the next stage.
 
         Raises:
@@ -50,7 +66,7 @@ class Pdml():
         self.stage = self.stage + 1
 
 
-    def prev_stage(self):
+    def prev_stage(self) -> None:
         """Sets moves the stage of the PDML to the previous stage.
 
         Raises:
@@ -80,17 +96,17 @@ class Pdml():
 
         try:
             # Month
-            month_str = re.search(r'|'.join(MONTHS), date_time_str).group().lower()
+            month_str = re.search(r'|'.join(MONTHS), date_time_str.lower()).group()
             month = MONTHS.index(month_str)
 
             # Date (regex matches digit 01-31 with whitespace or line ending/beginning surrounding)
-            date = int(re.search(r'(?!^|\s)([1-2][0-9]|3[0-1]|[1-9]|0[1-9])(?=\s|$)', date_time_str))
+            date = int(re.search(r'(?!^|\s)([1-2][0-9]|3[0-1]|[1-9]|0[1-9])(?=\s|$)', date_time_str).group())
 
             # Year (matches 4 digit ints)
-            year = int(re.search(r'(?!^|\s)(\d{4})(?=\s|$)', date_time_str))
+            year = int(re.search(r'(?!^|\s)(\d{4})(?=\s|$)', date_time_str).group())
 
             # Time (matches dd:dd:dd)
-            time = re.search(r'(?!^|\s)\d{2}:\d{2}:\d{2}(?=\s|$)', date_time_str).split(':')
+            time = list(map(int, re.search(r'(?!^|\s)\d{2}:\d{2}:\d{2}(?=\s|$)', date_time_str).group().split(':')))
 
             hour   = time[0]
             minute = time[1]
@@ -99,11 +115,11 @@ class Pdml():
             return datetime(year, month, date, hour, minute, second)
 
         except AttributeError:
-            raise ValueError('must have a valid date/time string')
+            raise ValueError(f'must have a valid date/time string, {date_time_str}')
    
 
     @staticmethod
-    def convert_element_to_pdml(xml_element: ElementTree.Element) -> Pdml:
+    def convert_element_to_pdml(xml_element: ElementTree.Element) -> 'Pdml':
         """Converts an XML tree element to a PDML object.
 
         This function can be used by an xml parser to efficiently create PDML objects 
@@ -121,23 +137,18 @@ class Pdml():
 
         try:
             assert xml_element.tag == 'pdml', 'Not a PDML element!'
-            date = Pdml.__create_datetime(xml_element.attr['time'])
-            if 'stage' in xml_element.attr:
-                stage = int(xml_element.attr['stage'])
+            date = Pdml.__create_datetime(xml_element.attrib['time'])
+            if 'stage' in xml_element.attrib:
+                stage = int(xml_element.attrib['stage'])
             else:
                 stage = 0
-            pdml = Pdml(date, xml_element.attr['creator'], stage)
+            pdml = Pdml(date, xml_element.attrib['creator'], stage)
             return pdml
-        except AssertionError | KeyError:
+        except (AssertionError, KeyError):
             raise ValueError('malformed XML Element')
 
 
-class Packet():
-    
-    def __init__(self, name, size):
-        self.name = name
-        self.size = size    # might be determined through computation
-        self.protocols = []
+
 
 class Protocol():
     
