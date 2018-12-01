@@ -1,14 +1,14 @@
 class FieldEquivalence:
-    SourceMessageType="";
-    SourceFieldName="";
-    TargetMessageType="";
-    TagetFielName="";
+    SourceMessageType = "";
+    SourceFieldName = "";
+    TargetMessageType = "";
+    TargetFieldName = "";
 
-    def __init__(self, SourceMessafeType,SourceFieldName,TargetMessageType,TargetFieldName):
-        self.SourceMessafeType = SourceMessafeType
+    def __init__(self, SourceMessageType, SourceFieldName, TargetMessageType, TargetFieldName):
+        self.SourceMessageType = SourceMessageType
         self.SourceFieldName = SourceFieldName
         self.TargetMessageType = TargetMessageType
-        self.TagetFielName = TargetFieldName
+        self.TargetFieldName = TargetFieldName
 
     def add(self):
         pass

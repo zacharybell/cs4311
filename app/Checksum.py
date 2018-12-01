@@ -1,9 +1,8 @@
 class Checksum:
+    PacketName = "";
+    FieldName = "";
 
-    PacketName="";
-    FieldName="";
-
-    def __init__(self,PacketName, FieldName):
+    def __init__(self, PacketName, FieldName):
         self.PacketName = PacketName
         self.FieldName = FieldName
 
