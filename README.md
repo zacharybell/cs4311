@@ -5,7 +5,7 @@
 2. Type 'python3 --version' and 'pip3 --version' to check installation.
 3. Make sure you have pipenv installed. This is a tool that allows for easy dependency management.
 4. To install 'pip3 install -U pipenv'
-5. Clone this repo (git clone <url>)
+5. Clone this repo (git clone <repo_url>)
 6. Install dependencies (pipenv install)
 
 ## Running Tests
