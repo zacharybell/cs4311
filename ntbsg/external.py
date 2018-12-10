@@ -1,3 +1,8 @@
+from xml.etree import ElementTree
+
+from pdml import Pdml
+
+
 def convert_pcap_to_pdml(src: str, dest: str) -> int:
     """ Converts a PCAP file to PDML using TShark
 
