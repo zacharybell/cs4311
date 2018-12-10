@@ -2,11 +2,11 @@
 
 ## Installation
 1. First make sure you have python3.6 installed and pip3.
-  1a. Type 'python3 --version' and 'pip3 --version' to check installation.
-2. Make sure you have pipenv installed. This is a tool that allows for easy dependency management.
-  2a. To install 'pip3 install -U pipenv'
-3. Clone this repo (git clone <url>)
-4. Install dependencies (pipenv install)
+2. Type 'python3 --version' and 'pip3 --version' to check installation.
+3. Make sure you have pipenv installed. This is a tool that allows for easy dependency management.
+4. To install 'pip3 install -U pipenv'
+5. Clone this repo (git clone <url>)
+6. Install dependencies (pipenv install)
 
 ## Running Tests
 Pipenv should have already installed pytest which is the package we are using to test. To run tests from the root directory 
