@@ -3,93 +3,124 @@ from xml.etree import ElementTree
 import re
 from typing import List
 
+class Entropy():
+    ## FIXME how is this computed?
+    ## entropy = #unique vals for field of message type / # number of packets of message type
+    pass
+
+class Field():
+
+    def __init__(self, name, show_name, size, value, show, fields):
+        self.name      = name
+        self.show_name = show_name
+        self.size      = size
+        self.value     = value
+        self.show      = show
+        self.fields    = fields
+
+    @staticmethod
+    def _convert_element_to_field(xml_element: ElementTree.Element) -> 'Field':
+        assert xml_element.tag == 'field', 'Not a Field element!'
+
+        name      = xml_element.attrib['name']
+        show_name = xml_element.attrib['showname']
+        size      = xml_element.attrib['size']
+        value     = xml_element.attrib['value']
+        show      = xml_element.attrib['show']
+
+        fields = []
+        for element in xml_element.getchildren():
+            fields.append(Field._convert_element_to_field(element))
+
+        return Field(name, show_name, size, value, show, fields)
+
+class Protocol():
+    
+    def __init__(self, field_name, show_name, size, position, fields):
+        self.field_name = field_name
+        self.show_name  = show_name
+        self.size       = size
+        self.position   = position
+        self.show       = ''          ##FIXME Didn't see this in the pdml file
+        self.value      = ''          ##FIXME Didn't see this in the pdml file
+        self.fields     = fields
+
+    @staticmethod
+    def _convert_element_to_protocol(xml_element: ElementTree.Element) -> 'Protocol':
+        assert xml_element.tag == 'proto', 'Not a Protocol element!'
+
+        field_name = xml_element.attrib['name']
+        show_name  = xml_element.attrib['showname']
+        size       = xml_element.attrib['size']
+        position   = xml_element.attrib['pos']
+
+        fields = []
+        for element in xml_element.getchildren():
+            fields.append(Field._convert_element_to_field(element))
+
+        return Protocol(field_name, show_name, size, position, fields)
+
+
 class Packet():
     
-    def __init__(self, name, size):
-        self.name = name
-        self.size = size    # might be determined through computation
-        self.protocols = []
+    def __init__(self, protocols):
+        self.name = ''  ##FIXME where is this set?
+        self.size = 0   ##FIXME where is this set?
+        self.protocols = protocols
+
+    @staticmethod
+    def _convert_element_to_packet(xml_element: ElementTree.Element) -> 'Packet':
+        assert xml_element.tag == 'packet', 'Not a Packet element!'
+
+        protocols = []
+        for element in xml_element.getchildren():
+            protocols.append(Packet._convert_element_to_packet(element))
+
+        return Packet(protocols)
+
 
 class Pdml():
 
-    __STAGE = ['setup', 'analysis', 'sequencing', 'generation']
 
-
-    def __init__(self, date: datetime, creator: str, stage=0):
+    def __init__(self, date: datetime, creator: str, packets: List[Packet]):
         
-        assert stage >= 0 and stage < len(Pdml.__STAGE)
-        
-        self.stage = stage
         self.name = ''
         self.description = ''
         self.date = date
         self.creator = creator
-        self.packets = []
-
-    @property
-    def name(self) -> str:
-        return self._name
-
-    @name.setter
-    def name(self, name: str) -> None:
-        self._name = name
-
-    @property
-    def description(self) -> str:
-        return self._description
-
-    @description.setter
-    def description(self, description: str) -> None:
-        self._description = description
-
-    @property
-    def packets(self) -> List[Packet]:
-        return self._packets
-
-    @packets.setter
-    def packets(self, packets: List[Packet]) -> None:
-        self._packets = packets
-    
-    def add_packet(self, packet: Packet) -> None:
-        self.packets.append(packet)
-
-
-    def next_stage(self) -> None:
-        """Sets moves the stage of the PDML to the next stage.
-
-        Raises:
-            Exception: If the stage doesn't exist.
-        """
-
-        if self.stage >= len(Pdml.__STAGE) - 1:
-            raise Exception('Attempting to reach stage that doesn\'t exist!')
-        self.stage = self.stage + 1
-
-
-    def prev_stage(self) -> None:
-        """Sets moves the stage of the PDML to the previous stage.
-
-        Raises:
-            Exception: If the stage doesn't exist.
-        """
-
-        if self.stage <= 0:
-            raise Exception('Attempting to reach stage that doesn\'t exist!')
-        self.stage = self.stage - 1
+        self.packets = packets
 
 
     @staticmethod
-    def __create_datetime(date_time_str: str) -> datetime:
+    def _datetime_to_pdml_datestr(dt: datetime) -> str:
+        """Takes a python standard datetime object and creates a date string for a pdml file.
+
+        The output is formated Www Mmm DD HH:MM:SS YYYY.
+
+        Example: Sat Sep 17 01:03:30 2016
+
+        Args:
+            dt (datetime): a datetime object containing the month, day, hour, minutes, and seconds of a pdml's creation
+        
+        Returns:
+            str: A pdml formated date time string.
+        """
+
+        return dt.strftime(r'%a %b %d %H:%M:%S %Y')
+
+
+    @staticmethod
+    def _pdml_datestr_to_datetime(date_time_str: str) -> datetime:
         """Takes a string containing the date and time and creates a datetime object.
 
         The input string must contain the month (MMM), date (DD), year (YYYY), and 
         the time (HH:MM:SS). Each of these must be separated by spaces.
 
         Args:
-            str: a string containing the date and time
+            date_time_str (str): a string containing the date and time
 
         Returns:
-            A datetime object from the standard library.
+            datetime: A datetime object from the standard library.
         """
 
         MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
@@ -119,7 +150,7 @@ class Pdml():
    
 
     @staticmethod
-    def convert_element_to_pdml(xml_element: ElementTree.Element) -> 'Pdml':
+    def _convert_element_to_pdml(xml_element: ElementTree.Element) -> 'Pdml':
         """Converts an XML tree element to a PDML object.
 
         This function can be used by an xml parser to efficiently create PDML objects 
@@ -137,35 +168,44 @@ class Pdml():
 
         try:
             assert xml_element.tag == 'pdml', 'Not a PDML element!'
-            date = Pdml.__create_datetime(xml_element.attrib['time'])
-            if 'stage' in xml_element.attrib:
-                stage = int(xml_element.attrib['stage'])
-            else:
-                stage = 0
-            pdml = Pdml(date, xml_element.attrib['creator'], stage)
-            return pdml
+            date = Pdml._pdml_datestr_to_datetime(xml_element.attrib['time'])
+
+            packets = []
+            for element in xml_element.getchildren():
+                packets.append(Packet._convert_element_to_packet(element))
+
+            return Pdml(date, xml_element.attrib['creator'], packets)
         except (AssertionError, KeyError):
             raise ValueError('malformed XML Element')
 
 
+    @staticmethod
+    def unmarshall(file: str) -> 'Pdml':
+        """Unmarshalls a PDML file into a Pdml object.
+
+        Args:
+            file (str): a file path to a pdml file
+
+        Returns:
+            Pdml: A constructed Pdml object
+        """
+
+        pdml_tree = ElementTree.parse(file)
+        pdml_element = pdml_tree.getroot()
+
+        return Pdml._convert_element_to_pdml(pdml_element)
 
 
-class Protocol():
-    
-    def __init__(self, field_name, show_name, size, position, show, value):
-        self.field_name = field_name
-        self.show_name = show_name
-        self.size = size
-        self.position = position
-        self.show = show
-        self.value = value
-        self.fields = []
+    def marshall(self, path: str, name: str=None) -> None:
+        """Saves the Pdml object as a Pdml formated file.
+        
+        Args:
+            path (str): the path to the target directory
+            name (str): the target file name (defaults to the pdml name)
 
-class Field():
+        Returns:
+            None
+        """
 
-    def __init__(self, name, show_name, size, value, show):
-        self.name = name
-        self.show_name = show_name
-        self.size = size    # might be determined through computation
-        self.value = value
-        self.show = show
+        pass
+        
