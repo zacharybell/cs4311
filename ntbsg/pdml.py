@@ -20,13 +20,13 @@ class Field():
 
     @staticmethod
     def _convert_element_to_field(xml_element: ElementTree.Element) -> 'Field':
-        assert xml_element.tag == 'field', 'Not a Field element!'
+        assert xml_element.tag == 'field', f'{xml_element.tag} is not a Field element!'
 
-        name      = xml_element.attrib['name']
-        show_name = xml_element.attrib['showname']
-        size      = xml_element.attrib['size']
-        value     = xml_element.attrib['value']
-        show      = xml_element.attrib['show']
+        name      = xml_element.attrib.get('name')
+        show_name = xml_element.attrib.get('showname')
+        size      = xml_element.attrib.get('size')
+        value     = xml_element.attrib.get('value')
+        show      = xml_element.attrib.get('show')
 
         fields = []
         for element in xml_element.getchildren():
@@ -47,12 +47,12 @@ class Protocol():
 
     @staticmethod
     def _convert_element_to_protocol(xml_element: ElementTree.Element) -> 'Protocol':
-        assert xml_element.tag == 'proto', 'Not a Protocol element!'
+        assert xml_element.tag == 'proto', f'{xml_element.tag} is not a Protocol element!'
 
-        field_name = xml_element.attrib['name']
-        show_name  = xml_element.attrib['showname']
-        size       = xml_element.attrib['size']
-        position   = xml_element.attrib['pos']
+        field_name = xml_element.attrib.get('name')
+        show_name  = xml_element.attrib.get('showname')
+        size       = xml_element.attrib.get('size')
+        position   = xml_element.attrib.get('pos')
 
         fields = []
         for element in xml_element.getchildren():
@@ -70,11 +70,11 @@ class Packet():
 
     @staticmethod
     def _convert_element_to_packet(xml_element: ElementTree.Element) -> 'Packet':
-        assert xml_element.tag == 'packet', 'Not a Packet element!'
+        assert xml_element.tag == 'packet', f'{xml_element.tag} is not a Packet element!'
 
         protocols = []
         for element in xml_element.getchildren():
-            protocols.append(Packet._convert_element_to_packet(element))
+            protocols.append(Protocol._convert_element_to_protocol(element))
 
         return Packet(protocols)
 
@@ -167,7 +167,7 @@ class Pdml():
         """
 
         try:
-            assert xml_element.tag == 'pdml', 'Not a PDML element!'
+            assert xml_element.tag == 'pdml', f'{xml_element.tag} is not a PDML element!'
             date = Pdml._pdml_datestr_to_datetime(xml_element.attrib['time'])
 
             packets = []
