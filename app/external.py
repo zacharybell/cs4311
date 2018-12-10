@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 
-import pdml
+from pdml import Pdml
 
 
 def convert_pcap_to_pdml(src: str, dest: str) -> int:
@@ -20,20 +20,26 @@ def convert_pcap_to_pdml(src: str, dest: str) -> int:
     return subprocess.call(args, shell=True)
 
 
-def parse_pdml(file: str) -> pdml.Pdml:
+def parse_pdml(file: str) -> Pdml:
     
     pdml_tree = ElementTree.parse(file)
 
     pdml_element = pdml_tree.getroot()
 
-    if pdml_element.tag == 'pdml':
-        root = pdml.Pdml.convert_element_to_pdml(pdml_element)
+    # if pdml_element.tag == 'pdml':
+    #     root = Pdml._convert_element_to_pdml(pdml_element)
         
     #     packet_elements = pdml_element.getchildren()
 
-    print(root)
+    children = pdml_element.getchildren()[0].getchildren()[0].getchildren()
 
-    return root
+    print('end')
+
+    return None
+
+    # print(root)
+
+    # return root
 
 
 parse_pdml('samples/cubic.pdml')
