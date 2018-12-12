@@ -7,7 +7,7 @@ class MessageTypeManager:
 
 		
 	def CreateMessageType(MessageTypeName,color,FieldValuePair):
-		messType = MessageType
+		messType = MessageType()
 		messType.MessageTypeName = MessageTypeName
 		messType.color = color
 		messType.FieldValuePair = FieldValuePair
