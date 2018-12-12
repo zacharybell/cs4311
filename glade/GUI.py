@@ -14,6 +14,9 @@ builder.add_from_file("UIFiles/NTBSG_Main.glade")
 class Handler:
 
     global builder
+    
+    def add_list():
+        print("hello")
 
     def new_session_overlay(self, button):
         dialog = builder.get_object('new_session_overlay')
@@ -165,22 +168,27 @@ def multi_set_show(obj, show, *args):
         else:
             obj.get_object(arg).hide()
 
-
-main_window = builder.get_object("main_window")
-builder.connect_signals(Handler())
-# multi_set_show(builder, False, 'label1', 'label2')
-main_window.show_all()
-multi_set_show(builder, True,
-                            "filter_area",
-                            "packet_area",
-                            "field_area",
-                            "new_tab")
-multi_set_show(builder, False,
-                            "dependency_tab",
-                            "template_tab",
-                            "state_machine_area",
-                            "equivalency_tab",
-                            "generation_tab")
+tree_iter = store.append(["Fake thingy", 3])
+print(tree_iter)
+for row in store:
+    #Print values of all columns
+    print(row[:])
+            
+#main_window = builder.get_object("main_window")
+#builder.connect_signals(Handler())
+## multi_set_show(builder, False, 'label1', 'label2')
+#main_window.show_all()
+#multi_set_show(builder, True,
+#                            "filter_area",
+#                            "packet_area",
+#                            "field_area",
+#                            "new_tab")
+#multi_set_show(builder, False,
+#                            "dependency_tab",
+#                            "template_tab",
+#                            "state_machine_area",
+#                            "equivalency_tab",
+#                            "generation_tab")
 # multi_set_show(builder, False,
 #                     "filter_area",
 #                     "packet_area",
