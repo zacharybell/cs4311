@@ -6,25 +6,25 @@
 
 class RelationshipManager():
     
-    def__init__(self):
+    def __init__(self):
         self.FieldEquivalences = []
         self.PacketLengthDependencies = []
         self.FieldLengthDependencies = []
         self.Checksums = []
     
-    create_FieldEquivalence(self, src_messagetype: MessageType, src_fieldname: str, target_messagetype: MessageType, target_fieldname: str) -> None:
+    def create_FieldEquivalence(self, src_messagetype: MessageType, src_fieldname: str, target_messagetype: MessageType, target_fieldname: str) -> None:
         self.FieldEquivalences.append(FieldEquivalence(src_messagetype, src_fieldname, target_messagetype, target_fieldname))
         
-    create_FieldLengthDependency(self, src_fieldname: str, target_fieldname: str) -> None:
+    def create_FieldLengthDependency(self, src_fieldname: str, target_fieldname: str) -> None:
         self.FieldLengthDependencies.append(FieldLengthDependency(src_fieldname), target_fieldname))
     
-    create_PacketLengthDependecy(self, packetname: str, fieldname: str) -> None:
+    def create_PacketLengthDependecy(self, packetname: str, fieldname: str) -> None:
         self.PacketLengthDependencies.append(PacketLengthDependency(packetname, fieldname))
         
-    create_Checksum(self, packetname: str, fieldname: str) -> None:
+    def create_Checksum(self, packetname: str, fieldname: str) -> None:
         self.Checksums.append(Checksum(packetname, fieldname))
         
-    get_field_equivalences(self, src_messagetype = None, src_fieldname = None, target_messagetype = None, target_fieldname = None):
+    def get_field_equivalences(self, src_messagetype = None, src_fieldname = None, target_messagetype = None, target_fieldname = None):
         found = []
         add = True
         if src_messagetype == None and src_fieldname == None and target_messagetype == None and target_fieldname == None:
@@ -46,7 +46,7 @@ class RelationshipManager():
                 
         return found
     
-    get_field_length_dependencies(self, src_fieldname = None, target_fieldname = None):
+    def get_field_length_dependencies(self, src_fieldname = None, target_fieldname = None):
         found = []
         add = True
         if src_fieldname == None and target_fieldname == None:
@@ -63,7 +63,7 @@ class RelationshipManager():
                 
         return found
     
-    get_packet_length_dependencies(self, packetname = None, fieldname = None):
+    def get_packet_length_dependencies(self, packetname = None, fieldname = None):
         found = []
         add = True
         if packetname == None and fieldname == None:
@@ -80,7 +80,7 @@ class RelationshipManager():
                 
         return found
             
-    get_checksums(self, packetname = None, fieldname = None):
+    def get_checksums(self, packetname = None, fieldname = None):
         found = []
         add = True
         if packetname == None and fieldname == None:
@@ -97,7 +97,7 @@ class RelationshipManager():
                 
         return found
     
-    update_field_equivalence(self, fieldEquivalence, attribute, change) -> None:
+    def update_field_equivalence(self, fieldEquivalence, attribute, change) -> None:
         if attribute = 'source_message_type':
             fieldEquivalence.src_messagetype = change
         if attribute = 'source_field_name':
@@ -107,19 +107,19 @@ class RelationshipManager():
         if attribute = 'target_field_name':
             fieldEquivalence.target_fieldname = change
     
-    update_field_length_dependency(self, fieldLengthDependency, attribute, change) -> None:
+    def update_field_length_dependency(self, fieldLengthDependency, attribute, change) -> None:
         if attribute = 'source_field_name':
             fieldLengthDependency.src_fieldname = change
         if attribute = 'target_field_name':
             fieldLengthDependency.target_fieldname = change
             
-    update_packet_length_dependency(self, packetLengthDependency, attribute, change) -> None:
+    def update_packet_length_dependency(self, packetLengthDependency, attribute, change) -> None:
         if attribute = 'packet_name':
             packetLengthDependency.packetname = change
         if attribute = 'field_name':
             packetLengthDependency.fieldname = change
             
-    update_checksum(self, checksum, attribute, change) -> None:
+    def update_checksum(self, checksum, attribute, change) -> None:
         if attribute = 'packet_name':
             checksum.packetname = change
         if attribute = 'field_name':
