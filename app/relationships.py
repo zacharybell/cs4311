@@ -22,7 +22,7 @@ class RelationshipManager():
         self.PacketLengthDependencies.append(PacketLengthDependency(packetname, fieldname))
         
     create_Checksum(self, packetname: str, fieldname: str) -> None:
-        self.Checksums(Checksum(packetname, fieldname))
+        self.Checksums.append(Checksum(packetname, fieldname))
         
     get_field_equivalences(self, src_messagetype = None, src_fieldname = None, target_messagetype = None, target_fieldname = None):
         found = []
