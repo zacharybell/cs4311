@@ -291,6 +291,38 @@ def multi_set_show(obj, show, *args):
 
             
 main_window = builder.get_object("main_window")
+
+layout = builder.get_object('field_area_data')
+main_window.add(layout)
+
+
+test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7),
+         ("Firefox", 1,  2, 3, 5, 6, 7)]
+
+
+liststore = Gtk.ListStore(str, int, int, int, int, int, int)
+
+for test in test_list:
+    liststore.append(list(test))
+
+field_area = Gtk.TreeView(liststore)
+
+for i, column_title in enumerate(["Field Name", "Showname", "Size", "Position", "Show", "Value", "Entropy"]):
+    renderer = Gtk.CellRendererText()
+    column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+    field_area.append_column(column)
+
+layout.pack_start(field_area, True, True, 0)
+
 builder.connect_signals(Handler())
 ## multi_set_show(builder, False, 'label1', 'label2')
 main_window.show_all()
@@ -306,31 +338,8 @@ multi_set_show(builder, False,
                             "equivalency_tab",
                             "generation_tab")
 
-test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7)]
 
 
-liststore = Gtk.ListStore(str, int, int, int, int, int, int)
-
-for test in test_list:
-    liststore.append(list(test))
-    
-field_area = builder.get_object('field_are')
-field_area.new_with_model(liststore)
-
-for i, column_title in enumerate(["Software", "Release Year", "Programming Language"]):
-    renderer = Gtk.CellRendererText()
-    column = Gtk.ListViewColumn(column_title, renderer, text=i)
-    field_area.append_column(column)
 
 # multi_set_show(builder, False,
 #                     "filter_area",
@@ -345,8 +354,6 @@ for i, column_title in enumerate(["Software", "Release Year", "Programming Langu
 
 
 Gtk.main()
-
-
 
 
 
