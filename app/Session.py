@@ -5,9 +5,6 @@ class Session:
         self.description = description
         self.pdml = pdml
 
-    def add_pdml(self, pdml):
-        self.pdml = pdml
-
 
 class WorkSpace:
 
@@ -15,7 +12,7 @@ class WorkSpace:
         self.name = name
         self.workspace_path = workspace_path
         self.sessions = []
-        self.currentSession
+        self.currentSession = None
 
     def addSession(self, name, description, pdml):
         self.sessions.append(Session(name, description, pdml))
@@ -24,12 +21,14 @@ class WorkSpace:
         for session in self.sessions:
             if session.name == name:
                 self.currentSession = session
+                break
 
     def removeSession(self, name):
         for session in self.sessions:
             if session.name == name:
                 self.sessions.remove(session)
-        
+                break
+
 
 class WorkSpace_Manager:
 
@@ -40,6 +39,7 @@ class WorkSpace_Manager:
         for workspace in self.workspaceList:
             if workspace.name == name:
                 self.workspaceList.remove(workspace)
+                break
 
     def addWorkspace(self, name, path):
         self.workspaceList.append(WorkSpace(name, path))
