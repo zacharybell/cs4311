@@ -1,18 +1,18 @@
 
 
 
-
 class Filter():
 
-    def __init__(name, expression):
+    def __init__(self, name, expression):
         self.name = name
         self.expression = expression
 
-    def updateFilterName(name):
+    def updateFilterName(self, name):
         self.name = name
 
-    def updateFilterExpression(expr):
-        self.expression = expt
+    def updateFilterExpression(self, expr):
+        self.expression = expr
+        
 
 
 class FilterManager():
@@ -22,16 +22,14 @@ class FilterManager():
         self.filters = []
 
 
-    def addFilter(name, expression):
+    def addFilter(self, name, expression):
 
         filter = Filter(name, expression)
         filters.append(filter)
 
-    def removeFilter(name):
+    def removeFilter(self, name):
 
         for filter in filters:
             if filter.name == name:
                 filters.remove(filter)
-
-
-        
+           
