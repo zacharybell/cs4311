@@ -1,7 +1,12 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+import sys
+sys.path.append('../app/')
+from state_machine import StateMachine
 
+transitions = [(1,2),(2,3),(3,4),(4,5),(4,2)]
+t_comboboxes = []
 
 class Handler:
 
@@ -137,10 +142,43 @@ class Handler:
                             "generation_tab")
 
     def stage_three_setup(self, button):
+        sm = StateMachine()
+        sm.reset(transitions)
+        sm.generate()
+        global t_comboboxes
+        state_machine = builder.get_object('state_machine')
+        transition_list = builder.get_object('transition_list')
+        nodes = sm.get_nodes()
+        transition_store = Gtk.ListStore(str)
+        t_comboboxes = []
+        for node in nodes:
+            transition_store.append([str(node)])
+        for src, dest in sm.get_edges():
+            box = Gtk.HBox()
+            src_combo = Gtk.ComboBox.new_with_model(transition_store)
+            renderer_text = Gtk.CellRendererText()
+            src_combo.pack_start(renderer_text, True)
+            src_combo.add_attribute(renderer_text, "text", 0)
+            src_combo.set_active(list(nodes).index(src))
+            box.pack_start(src_combo, True, True, 0)
+            box.pack_start(Gtk.Label("--->"), True, True, 1)
+            dest_combo = Gtk.ComboBox.new_with_model(transition_store)
+            renderer_text = Gtk.CellRendererText()
+            dest_combo.pack_start(renderer_text, True)
+            dest_combo.add_attribute(renderer_text, "text", 0)
+            dest_combo.set_active(list(nodes).index(dest))
+            t_comboboxes.append((src_combo, dest_combo))
+            box.pack_start(dest_combo, True, True, 0)
+            transition_list.pack_start(box, True, True, 0)
+            print(src, dest)
+        state_machine.set_from_file("statemachine.png")
+        transition_list.show_all()
+
         multi_set_show(builder, True,
                            "state_machine",
                             "field_area",
-                            "equivalency_tab")
+                            "equivalency_tab",
+                            "transition_list")
         multi_set_show(builder, False,
                             "filter_area",
                             "field_area",
@@ -149,9 +187,6 @@ class Handler:
                             "template_tab",
                             "generation_tab",
                             "packet_area")
-        
-        state_machine = builder.get_object('state_machine')
-        state_machine.set_from_file("")
     
 
     def stage_four_setup(self, button):
@@ -212,6 +247,24 @@ class Handler:
         print("add session")
         tree = builder.get_object('session_view_tree')
         tree.add_column_name("Session A",0)
+
+# update state machine
+    def update_state_machine(self, button):
+        sm = StateMachine()
+        transitions = []
+        global t_comboboxes
+        for src_box, dest_box in t_comboboxes:
+            src = src_box.get_active() + 1
+            dst = dest_box.get_active() + 1
+            print("src ", src)
+            print("dst ", dst)
+            transitions.append((src, dst))
+        sm.reset(transitions)
+        sm.generate()
+        state_machine = builder.get_object('state_machine')
+        state_machine.set_from_file("statemachine.png")
+        state_machine.show_all()
+        print("pressed")
 
 builder = Gtk.Builder()
 builder.add_from_file("UIFiles/NTBSG_Main.glade")
