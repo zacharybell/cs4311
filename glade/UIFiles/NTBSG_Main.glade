@@ -333,7 +333,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="add_session_tree" swapped="no"/>
+                <signal name="clicked" handler="create_new_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -399,7 +399,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="new_session_name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Session name</property>
@@ -410,7 +410,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="new_session_description">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Project description</property>
@@ -485,6 +485,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="open_existing_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -498,7 +499,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <signal name="clicked" handler="close_existing_sess" swapped="no"/>
+                <signal name="clicked" handler="close_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -546,7 +547,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="existing_session_path">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -562,6 +563,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="session_file_browser" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -3089,7 +3091,7 @@ Name</property>
                         <property name="vexpand">True</property>
                         <property name="model">field_area_list_store</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                          <object class="GtkTreeSelection" id="field_treeview"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="field_area_selected"/>
@@ -3223,6 +3225,7 @@ Name</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="launch_workspace" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -3329,7 +3332,7 @@ Path</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dir">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Worspace Directory Path</property>
@@ -3340,7 +3343,7 @@ Path</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dest_name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Destination 
@@ -3352,7 +3355,7 @@ Folder Name</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dir_path">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Destination Folder 
@@ -3369,6 +3372,7 @@ Path</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="workspace_directory" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -3381,6 +3385,7 @@ Path</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
+                    <signal name="clicked" handler="wkspace_dest_folder" swapped="no"/>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>

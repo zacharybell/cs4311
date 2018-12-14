@@ -1,9 +1,9 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-
-
-store = Gtk.TreeStore(str, int)
+import tkinter
+from tkinter.filedialog import askdirectory
+from tkinter.filedialog import askopenfilename
 
 
 
@@ -15,15 +15,33 @@ class Handler:
 
     global builder
     
-    def add_list():
-        print("hello")
-
+    # New Session Code
+    
     def new_session_overlay(self, button):
         dialog = builder.get_object('new_session_overlay')
         response = dialog.run()
         print(response)
         dialog.hide()
-
+        
+                
+    def close_new_session(self, button):
+        dialog = builder.get_object('new_session_overlay')
+        dialog.hide()
+        
+    def create_new_session(self, button):
+        new_session_name = builder.get_object('new_session_name')
+        new_session_desc = builder.get_object('new_session_description')
+        session_name = new_session_name.get_text()
+        session_description = new_session_desc.get_text()
+        print(session_name)
+        print(session_description)
+        dialog = builder.get_object('new_session_overlay')
+        dialog.hide()
+        
+    # End of New Session Code
+    
+    # Existing Session Code
+    
     def open_session_overlay(self, button):
         dialog = builder.get_object('open_session_overlay')
         response = dialog.run()
@@ -31,13 +49,68 @@ class Handler:
         dialog.hide()
 
     def close_session(self, button):
-        print("close session")
+        dialog = builder.get_object('open_session_overlay')
+        dialog.hide()
+        
+    def open_existing_session(self, button):
+        session_path = builder.get_object('existing_session_path')
+        filepath = session_path.get_text()
+        print(filepath)
+        dialog = builder.get_object('open_session_overlay')
+        dialog.hide()
+        
+    def session_file_browser(self, button):
+        root = tkinter.Tk()
+        root.withdraw()
+        file_path = askopenfilename()
+        session_path = builder.get_object('existing_session_path')
+        session_path.set_text(file_path)
+        root.destroy()
+        
+    # End of Existing Session Code
+    
+    # Switch Workplace Code
 
     def workspace_launcher_overlay(self, button):
         dialog = builder.get_object('workspace_launcher_overlay')
         response = dialog.run()
         print(response)
         dialog.hide()
+        
+    def launch_workspace(self, button):
+        dialog = builder.get_object('workspace_launcher_overlay')
+        workspace_dir = builder.get_object('workspace_dir')
+        workspace_dest_name = builder.get_object('workspace_dest_name')
+        workspace_dir_path = builder.get_object('workspace_dir_path')
+        workspace_dir = workspace_dir.get_text()
+        workspace_dest_name = workspace_dest_name.get_text()
+        workspace_dir_path = workspace_dir_path.get_text()
+        print(workspace_dir)
+        print(workspace_dest_name)
+        print(workspace_dir_path)
+        dialog.hide()
+        
+    def close_workspace_launcher(self, button):
+        dialog = builder.get_object('workspace_launcher_overlay')
+        dialog.hide() 
+        
+    def workspace_directory(self, button):
+        root = tkinter.Tk()
+        root.withdraw()
+        dir_path = askdirectory(initialdir='.')
+        workspace_dir = builder.get_object('workspace_dir')
+        workspace_dir.set_text(dir_path)
+        root.destroy()
+        
+    def wkspace_dest_folder(self, button):
+        root = tkinter.Tk()
+        root.withdraw()
+        dir_path = askdirectory(initialdir='.')
+        workspace_dir_path = builder.get_object('workspace_dir_path')
+        workspace_dir_path.set_text(dir_path)
+        root.destroy()
+
+    # End of Switch Workplace Code
 
     def terminal_overlay(self, button):
         if os.name == 'nt':
@@ -149,12 +222,6 @@ class Handler:
         dialog = builder.get_object('filter_overlay')
         gtk_close_window(dialog);
         
-    def close_new_session(self, button):
-        print("close new session overlay")
-        dialog = builder.get_object('new_session_overlay')
-        response = gtk_close_window(dialog)
-        print(response)
-        
     def add_session_tree(self, button):
         print("add session")
         tree = builder.get_object('session_view_tree')
@@ -168,27 +235,33 @@ def multi_set_show(obj, show, *args):
         else:
             obj.get_object(arg).hide()
 
-tree_iter = store.append(["Fake thingy", 3])
-print(tree_iter)
-for row in store:
-    #Print values of all columns
-    print(row[:])
+#store = Gtk.ListStore(str, int)
+#fakelist = [["Fake thingy", 3], ["Other fake thingy", 5]]
+#
+#for item in fakelist:
+#    store.append(item)
+#    
+#for row in store:
+#    #Print values of all columns
+#    print(row[:])
+    
+
             
-#main_window = builder.get_object("main_window")
-#builder.connect_signals(Handler())
+main_window = builder.get_object("main_window")
+builder.connect_signals(Handler())
 ## multi_set_show(builder, False, 'label1', 'label2')
-#main_window.show_all()
-#multi_set_show(builder, True,
-#                            "filter_area",
-#                            "packet_area",
-#                            "field_area",
-#                            "new_tab")
-#multi_set_show(builder, False,
-#                            "dependency_tab",
-#                            "template_tab",
-#                            "state_machine_area",
-#                            "equivalency_tab",
-#                            "generation_tab")
+main_window.show_all()
+multi_set_show(builder, True,
+                            "filter_area",
+                            "packet_area",
+                            "field_area",
+                            "new_tab")
+multi_set_show(builder, False,
+                            "dependency_tab",
+                            "template_tab",
+                            "state_machine_area",
+                            "equivalency_tab",
+                            "generation_tab")
 # multi_set_show(builder, False,
 #                     "filter_area",
 #                     "packet_area",
