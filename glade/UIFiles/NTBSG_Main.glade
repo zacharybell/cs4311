@@ -558,18 +558,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Browse</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="session_file_browser" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -610,6 +599,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">117</property>
+                <signal name="clicked" handler="convert_pdml" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -625,7 +615,7 @@
                 <property name="receives_default">True</property>
                 <property name="margin_left">7</property>
                 <property name="margin_top">7</property>
-                <signal name="clicked" handler="close_pcap" swapped="no"/>
+                <signal name="clicked" handler="pcap_close" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -696,7 +686,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="PCAP Entry">
+                  <object class="GtkEntry" id="pcap_file">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_left">12</property>
@@ -711,17 +701,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="pcap button">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -748,7 +728,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="dissector entry">
+                  <object class="GtkEntry" id="dissector">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="xalign">0.5</property>
@@ -761,18 +741,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="dissector button">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="margin_left">9</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -1378,7 +1347,7 @@ Description</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkImage" id="state_machine_area">
+                  <object class="GtkImage" id="state_machine">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="pixbuf">state-machine.jpg</property>
@@ -3297,7 +3266,7 @@ directory to store sessions.</property>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Workspace</property>
+                    <property name="label" translatable="yes">Full Workspace Path</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -3367,32 +3336,6 @@ Path</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="workspace_directory" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <signal name="clicked" handler="wkspace_dest_folder" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -3401,6 +3344,12 @@ Path</property>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>

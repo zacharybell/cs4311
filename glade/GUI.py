@@ -1,14 +1,6 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import tkinter
-from tkinter.filedialog import askdirectory
-from tkinter.filedialog import askopenfilename
-
-
-
-builder = Gtk.Builder()
-builder.add_from_file("UIFiles/NTBSG_Main.glade")
 
 
 class Handler:
@@ -59,14 +51,6 @@ class Handler:
         dialog = builder.get_object('open_session_overlay')
         dialog.hide()
         
-    def session_file_browser(self, button):
-        root = tkinter.Tk()
-        root.withdraw()
-        file_path = askopenfilename()
-        session_path = builder.get_object('existing_session_path')
-        session_path.set_text(file_path)
-        root.destroy()
-        
     # End of Existing Session Code
     
     # Switch Workplace Code
@@ -94,35 +78,37 @@ class Handler:
         dialog = builder.get_object('workspace_launcher_overlay')
         dialog.hide() 
         
-    def workspace_directory(self, button):
-        root = tkinter.Tk()
-        root.withdraw()
-        dir_path = askdirectory(initialdir='.')
-        workspace_dir = builder.get_object('workspace_dir')
-        workspace_dir.set_text(dir_path)
-        root.destroy()
-        
-    def wkspace_dest_folder(self, button):
-        root = tkinter.Tk()
-        root.withdraw()
-        dir_path = askdirectory(initialdir='.')
-        workspace_dir_path = builder.get_object('workspace_dir_path')
-        workspace_dir_path.set_text(dir_path)
-        root.destroy()
-
     # End of Switch Workplace Code
+    
+    # PCAP Overlay Code
+    
+    def pcap_overlay(self, button):
+        dialog = builder.get_object('pcap_overlay')
+        response = dialog.run()
+        print(response)
+        dialog.hide()
+        
+    def pcap_close(self, button):
+        dialog = builder.get_object('pcap_overlay')
+        dialog.hide() 
+    
+    def convert_pdml(self, button):
+        dialog = builder.get_object('pcap_overlay')
+        pcap_file = builder.get_object('pcap_file')
+        dissector = builder.get_object('dissector')
+        pcap_file = pcap_file.get_text()
+        dissector = dissector.get_text()
+        print(pcap_file)
+        print(dissector)
+        dialog.hide()
+        
+    # End of PCAP Overlay Code
 
     def terminal_overlay(self, button):
         if os.name == 'nt':
             os.system("start cmd")
         elif os.name == 'posix':
             os.system("x-terminal-emulator -e /bin/bash")
-
-    def pcap_overlay(self, button):
-        dialog = builder.get_object('pcap_overlay')
-        response = dialog.run()
-        print(response)
-        dialog.hide()
 
     def stage_one_setup(self, button):
         multi_set_show(builder, True,
@@ -133,7 +119,7 @@ class Handler:
         multi_set_show(builder, False,
                             "dependency_tab",
                             "template_tab",
-                            "state_machine_area",
+                            "state_machine",
                             "equivalency_tab",
                             "generation_tab")
 
@@ -146,13 +132,13 @@ class Handler:
         multi_set_show(builder, False,
                             "filter_area",
                             "new_tab",
-                            "state_machine_area",
+                            "state_machine",
                             "equivalency_tab",
                             "generation_tab")
 
     def stage_three_setup(self, button):
         multi_set_show(builder, True,
-                           "state_machine_area",
+                           "state_machine",
                             "field_area",
                             "equivalency_tab")
         multi_set_show(builder, False,
@@ -163,6 +149,10 @@ class Handler:
                             "template_tab",
                             "generation_tab",
                             "packet_area")
+        
+        state_machine = builder.get_object('state_machine')
+        state_machine.set_from_file("")
+    
 
     def stage_four_setup(self, button):
         multi_set_show(builder, True,
@@ -175,7 +165,7 @@ class Handler:
                             "new_tab",
                             "dependency_tab",
                             "template_tab",
-                            "state_machine_area",
+                            "state_machine",
                             "equivalency_tab")
 
     def pdml_state_save_as(self, button):
@@ -216,16 +206,15 @@ class Handler:
 
     def tag_area_cancel(self, button):
         print("tag_area_cancel")
-        
-    def close_filter_overlay(self, button):
-        print("close filter overlay")
-        dialog = builder.get_object('filter_overlay')
-        gtk_close_window(dialog);
+
         
     def add_session_tree(self, button):
         print("add session")
         tree = builder.get_object('session_view_tree')
         tree.add_column_name("Session A",0)
+
+builder = Gtk.Builder()
+builder.add_from_file("UIFiles/NTBSG_Main.glade")
 
 
 def multi_set_show(obj, show, *args):
@@ -259,7 +248,7 @@ multi_set_show(builder, True,
 multi_set_show(builder, False,
                             "dependency_tab",
                             "template_tab",
-                            "state_machine_area",
+                            "state_machine",
                             "equivalency_tab",
                             "generation_tab")
 # multi_set_show(builder, False,
@@ -269,7 +258,7 @@ multi_set_show(builder, False,
 #                     "new_tab",
 #                     "dependency_tab",
 #                     "template_tab",
-#                     # "state_machine_area",
+#                     # #"state_machine_area",
 #                     "equivalency_tab",
 #                     "generation_tab")
 
