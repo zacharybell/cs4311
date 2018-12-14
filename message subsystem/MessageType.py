@@ -3,3 +3,4 @@ class MessageType:
 		self.MessageTypeName = MessageTypeName
 		self.Color = Color
 		self.FieldValuePair = FieldValuePair
+		self.next = None
