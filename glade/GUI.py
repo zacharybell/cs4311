@@ -122,6 +122,7 @@ class Handler:
                             "state_machine",
                             "equivalency_tab",
                             "generation_tab")
+        
 
     def stage_two_setup(self, button):
         multi_set_show(builder, True,
@@ -251,6 +252,33 @@ multi_set_show(builder, False,
                             "state_machine",
                             "equivalency_tab",
                             "generation_tab")
+
+test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7)]
+
+
+liststore = Gtk.ListStore(str, int, int, int, int, int, int)
+
+for test in test_list:
+    liststore.append(list(test))
+    
+field_area = builder.get_object('field_are')
+field_area.new_with_model(liststore)
+
+for i, column_title in enumerate(["Software", "Release Year", "Programming Language"]):
+    renderer = Gtk.CellRendererText()
+    column = Gtk.ListViewColumn(column_title, renderer, text=i)
+    field_area.append_column(column)
+
 # multi_set_show(builder, False,
 #                     "filter_area",
 #                     "packet_area",
