@@ -29,7 +29,7 @@ class FilterManager():
 
     def removeFilter(self, name):
 
-        for filter in filters:
+        for filter in self.filters:
             if filter.name == name:
-                filters.remove(filter)
+                self.filters.remove(filter)
            
