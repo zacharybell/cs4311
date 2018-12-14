@@ -24,8 +24,7 @@ class FilterManager():
 
     def addFilter(self, name, expression):
 
-        filter = Filter(name, expression)
-        filters.append(filter)
+        self.filters.append(Filter(name, expression))
 
     def removeFilter(self, name):
 
