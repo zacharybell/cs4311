@@ -359,6 +359,38 @@ def setup_packetarea(main_window):
         field_area.append_column(column)
     
     layout.pack_start(field_area, True, True, 0)
+    
+def setup_sessionarea(main_window):
+    layout = builder.get_object('packet_area_data')
+    main_window.add(layout)
+    
+    
+    test_list = [("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),]
+    
+    
+    liststore = Gtk.ListStore(str, int)
+    
+    for test in test_list:
+        liststore.append(list(test))
+    
+    field_area = Gtk.TreeView(liststore)
+    
+    for i, column_title in enumerate(["Packet", "Size"]):
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+        field_area.append_column(column)
+    
+    layout.pack_start(field_area, True, True, 0)
             
 main_window = builder.get_object("main_window")
 
