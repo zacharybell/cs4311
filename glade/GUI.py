@@ -301,20 +301,14 @@ def setup_fieldarea(main_window):
     main_window.add(layout)
     
     
-    test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7)]
+    test_list = [("icmp.type", "Type 8 [Echo (ping) request]",  1, 34, 8, "08", 2),
+             ("icmp.code", "Code 0",  1, 35, 0x00, "00", 2),
+             ("icmp.checksum", "Checksum 0x6861 (correct)",  0x00, 36, 0x6861, "6861", 0),
+             ("icmp.ldent", "Identifier: 0x809e",  2, 38, 0x809e, "809e", 2),
+             ("icmp.seq", "Sequence number: 0x0f00",  2, 40, 0x0f00, "0f00", 2)]
     
     
-    liststore = Gtk.ListStore(str, int, int, int, int, int, int)
+    liststore = Gtk.ListStore(str, str, int, int, int, str, int)
     
     for test in test_list:
         liststore.append(list(test))
@@ -332,68 +326,118 @@ def setup_packetarea(main_window):
     layout = builder.get_object('packet_area_data')
     main_window.add(layout)
     
+    test_list = [["Frame 718: frame, eth, ip, tcp", ["Frame 718: 74 bytes on wire (592 bits), 74 bits captured (592 bits) on interface 0", 20],
+                                                    ["Ethernet II, Src: Elitegro_dd:12:cd (00:19:21:dd:12:cd), Dst: Broadcom_de:ad:05 (00:10:18:de:ad:05)", 25], 
+                                                    ["Internet Control Message Protocol", 25],
+                                                    ["Transmission Control Protocol, Src Port: 55394(55394), Dst Port: 80 (80), Seq: 0, Len: 0", 25]],
+         ["Frame 767: frame, eth, ip, tcp"],
+         ["Frame 768: frame, eth, ip, tcp"],
+         ["Frame 769: frame, eth, ip, tcp, http",]]
+         
     
-    test_list = [("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),]
+    treestore = Gtk.TreeStore(str, int)
+        # fill in the model
+    for i in range(len(test_list)):
+        piter = treestore.append(None, [test_list[i][0], 74])
+        # append the books and the associated boolean value as children of
+        # the author
+        j = 1
+        while j < len(test_list[i]):
+            treestore.append(piter, test_list[i][j])
+            j += 1
+
+    # the treeview shows the model
+    # create a treeview on the model self.store
+    packet_area = Gtk.TreeView(treestore)    
     
-    
-    liststore = Gtk.ListStore(str, int)
-    
-    for test in test_list:
-        liststore.append(list(test))
-    
-    field_area = Gtk.TreeView(liststore)
-    
+#    # the cellrenderer for the first column - text
+#    renderer_tree = Gtk.CellRendererText()
+#    # the first column is created
+#    column = Gtk.TreeViewColumn("Workspace X", renderer_tree, text=0)
+#    # and it is appended to the treeview
+#    workspace.append_column(column)
+#    
     for i, column_title in enumerate(["Packet", "Size"]):
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-        field_area.append_column(column)
+        packet_area.append_column(column)
     
-    layout.pack_start(field_area, True, True, 0)
+    layout.pack_start(packet_area, True, True, 0)
     
+#    
+#    layout = builder.get_object('packet_area_data')
+#    main_window.add(layout)
+#    
+#    
+#    test_list = [("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),
+#             ("Firefox", 1),]
+#    
+#    
+#    liststore = Gtk.ListStore(str, int)
+#    
+#    for test in test_list:
+#        liststore.append(list(test))
+#    
+#    field_area = Gtk.TreeView(liststore)
+#    
+#    for i, column_title in enumerate(["Packet", "Size"]):
+#        renderer = Gtk.CellRendererText()
+#        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+#        field_area.append_column(column)
+#    
+#    layout.pack_start(field_area, True, True, 0)
+#    
 def setup_sessionarea(main_window):
-    layout = builder.get_object('packet_area_data')
+    layout = builder.get_object('workspace_area')
     main_window.add(layout)
     
+    test_list = [["Session A", ["State 1"], ["State 2"]],
+         ["Session B", ["State 1"], ["State 2"]],
+         ["Session C", ["State 1"], ["State 2"]]]
     
-    test_list = [("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),]
+    treestore = Gtk.TreeStore(str)
+        # fill in the model
+    for i in range(len(test_list)):
+        # the iter piter is returned when appending the author in the first column
+        # and False in the second
+        piter = treestore.append(None, [test_list[i][0]])
+        # append the books and the associated boolean value as children of
+        # the author
+        j = 1
+        while j < len(test_list[i]):
+            treestore.append(piter, test_list[i][j])
+            j += 1
+
+    # the treeview shows the model
+    # create a treeview on the model self.store
+    workspace = Gtk.TreeView(treestore)    
     
+    # the cellrenderer for the first column - text
+    renderer_tree = Gtk.CellRendererText()
+    # the first column is created
+    column = Gtk.TreeViewColumn("Workspace X", renderer_tree, text=0)
+    # and it is appended to the treeview
+    workspace.append_column(column)
+#    
+#    for i, column_title in enumerate(["Workspace X"]):
+#        renderer = Gtk.CellRendererText()
+#        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+#        field_area.append_column(column)
     
-    liststore = Gtk.ListStore(str, int)
-    
-    for test in test_list:
-        liststore.append(list(test))
-    
-    field_area = Gtk.TreeView(liststore)
-    
-    for i, column_title in enumerate(["Packet", "Size"]):
-        renderer = Gtk.CellRendererText()
-        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-        field_area.append_column(column)
-    
-    layout.pack_start(field_area, True, True, 0)
+    layout.pack_start(workspace, True, True, 0)
             
 main_window = builder.get_object("main_window")
 
+setup_sessionarea(main_window)
 setup_fieldarea(main_window)
 setup_packetarea(main_window)
 
@@ -412,21 +456,6 @@ multi_set_show(builder, False,
                             "equivalency_tab",
                             "generation_tab",
                             "transition_update")
-
-
-
-
-# multi_set_show(builder, False,
-#                     "filter_area",
-#                     "packet_area",
-#                     "field_area_section",
-#                     "new_tab",
-#                     "dependency_tab",
-#                     "template_tab",
-#                     # #"state_machine_area",
-#                     "equivalency_tab",
-#                     "generation_tab")
-
 
 Gtk.main()
 
