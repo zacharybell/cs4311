@@ -125,6 +125,8 @@ class Handler:
                             "dependency_tab",
                             "template_tab",
                             "state_machine",
+                            "transition_update",
+                            "transition_list",
                             "equivalency_tab",
                             "generation_tab")
         
@@ -139,6 +141,8 @@ class Handler:
                             "filter_area",
                             "new_tab",
                             "state_machine",
+                            "transition_update",
+                            "transition_list",
                             "equivalency_tab",
                             "generation_tab")
 
@@ -177,6 +181,7 @@ class Handler:
 
         multi_set_show(builder, True,
                            "state_machine",
+                           "transition_update",
                             "field_area",
                             "equivalency_tab",
                             "transition_list")
@@ -202,6 +207,8 @@ class Handler:
                             "dependency_tab",
                             "template_tab",
                             "state_machine",
+                            "transition_update",
+                            "transition_list",
                             "equivalency_tab")
 
     def pdml_state_save_as(self, button):
@@ -289,39 +296,74 @@ def multi_set_show(obj, show, *args):
 #    print(row[:])
     
 
+def setup_fieldarea(main_window):
+    layout = builder.get_object('field_area_data')
+    main_window.add(layout)
+    
+    
+    test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7),
+             ("Firefox", 1,  2, 3, 5, 6, 7)]
+    
+    
+    liststore = Gtk.ListStore(str, int, int, int, int, int, int)
+    
+    for test in test_list:
+        liststore.append(list(test))
+    
+    field_area = Gtk.TreeView(liststore)
+    
+    for i, column_title in enumerate(["Field Name", "Showname", "Size", "Position", "Show", "Value", "Entropy"]):
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+        field_area.append_column(column)
+    
+    layout.pack_start(field_area, True, True, 0)
+    
+def setup_packetarea(main_window):
+    layout = builder.get_object('packet_area_data')
+    main_window.add(layout)
+    
+    
+    test_list = [("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),
+             ("Firefox", 1),]
+    
+    
+    liststore = Gtk.ListStore(str, int)
+    
+    for test in test_list:
+        liststore.append(list(test))
+    
+    field_area = Gtk.TreeView(liststore)
+    
+    for i, column_title in enumerate(["Packet", "Size"]):
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+        field_area.append_column(column)
+    
+    layout.pack_start(field_area, True, True, 0)
             
 main_window = builder.get_object("main_window")
 
-layout = builder.get_object('field_area_data')
-main_window.add(layout)
-
-
-test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7),
-         ("Firefox", 1,  2, 3, 5, 6, 7)]
-
-
-liststore = Gtk.ListStore(str, int, int, int, int, int, int)
-
-for test in test_list:
-    liststore.append(list(test))
-
-field_area = Gtk.TreeView(liststore)
-
-for i, column_title in enumerate(["Field Name", "Showname", "Size", "Position", "Show", "Value", "Entropy"]):
-    renderer = Gtk.CellRendererText()
-    column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-    field_area.append_column(column)
-
-layout.pack_start(field_area, True, True, 0)
+setup_fieldarea(main_window)
+setup_packetarea(main_window)
 
 builder.connect_signals(Handler())
 ## multi_set_show(builder, False, 'label1', 'label2')
@@ -336,7 +378,8 @@ multi_set_show(builder, False,
                             "template_tab",
                             "state_machine",
                             "equivalency_tab",
-                            "generation_tab")
+                            "generation_tab",
+                            "transition_update")
 
 
 
