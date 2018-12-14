@@ -1,3 +1,5 @@
+from MessageType import MessageType
+
 class FieldValuePair:
 	def __init__(self, FieldName, FieldValue):
 		self.FieldName = FieldName
@@ -16,3 +18,5 @@ class FieldValuePair:
 	def Update(self, MessageType, FieldName, FieldValue):
 		MessageType.FieldValuePair.FieldName = FieldName
 		MessageType.FieldValuePair.FieldValue = FieldValue
+
+m = FieldValuePair(":*",":p")
