@@ -34,23 +34,6 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="filter_overlay_list_store">
-    <columns>
-      <!-- column-name selected -->
-      <column type="gboolean"/>
-      <!-- column-name saved_filter -->
-      <column type="gchararray"/>
-      <!-- column-name filter_expression -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0">False</col>
-        <col id="1" translatable="yes">IPX only</col>
-        <col id="2" translatable="yes">ipx</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkDialog" id="filter_overlay">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Filter</property>
@@ -113,36 +96,12 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">5</property>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="width_request">500</property>
-                    <property name="height_request">350</property>
+                  <object class="GtkBox" id="filter_area_data">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="shadow_type">in</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkTreeView" id="filter_overlay_tree_view">
-                        <property name="width_request">400</property>
-                        <property name="height_request">400</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="model">filter_overlay_list_store</property>
-                        <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="selected"/>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="saved_filter">
-                            <property name="title" translatable="yes">Saved Filter</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn" id="filter_expression">
-                            <property name="title" translatable="yes">Filter Expression</property>
-                          </object>
-                        </child>
-                      </object>
+                      <placeholder/>
                     </child>
                   </object>
                   <packing>
@@ -309,6 +268,23 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="filter_overlay_list_store">
+    <columns>
+      <!-- column-name selected -->
+      <column type="gboolean"/>
+      <!-- column-name saved_filter -->
+      <column type="gchararray"/>
+      <!-- column-name filter_expression -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">False</col>
+        <col id="1" translatable="yes">IPX only</col>
+        <col id="2" translatable="yes">ipx</col>
+      </row>
+    </data>
   </object>
   <object class="GtkListStore" id="liststore1"/>
   <object class="GtkApplicationWindow" id="main_window">
@@ -859,12 +835,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="open_filter_window">
                             <property name="label" translatable="yes">Save</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <signal name="clicked" handler="filter_save" swapped="no"/>
+                            <signal name="clicked" handler="filter_window" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1093,9 +1069,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkComboBox">
+                          <object class="GtkBox" id="tag_combo">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2983,6 +2963,7 @@ Name</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="save_tag" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -2996,6 +2977,7 @@ Name</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_tag_overlay" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -3051,7 +3033,7 @@ Name</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="tag entry">
+                  <object class="GtkEntry" id="tag name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_left">38</property>
@@ -3072,7 +3054,7 @@ Name</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox">
+              <object class="GtkBox" id="tag field">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -3126,7 +3108,7 @@ Description</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="tag description">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_left">34</property>
