@@ -21,6 +21,9 @@ class StateMachine:
 	def get_edges(self):
 		return self.graph.edges()
 
+	def get_nodes(self):
+		return self.graph.nodes()
+
 	def generate(self):
 		A = to_agraph(self.graph)
 		A.layout('dot')
