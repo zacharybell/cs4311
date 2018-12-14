@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkListStore" id="field_area_list_store">
@@ -56,9 +56,6 @@
     <property name="title" translatable="yes">Filter</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -86,11 +83,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="filter_overlay_close">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_filter_overlay" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -317,9 +315,6 @@
   <object class="GtkDialog" id="new_session_overlay">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -333,11 +328,12 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="create_session">
                 <property name="label" translatable="yes">Create</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="create_new_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -346,11 +342,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="new_overlay_cancel">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_new_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -402,7 +399,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="new_session_name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Session name</property>
@@ -413,7 +410,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="new_session_description">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Project description</property>
@@ -469,9 +466,6 @@
     <property name="title" translatable="yes">Open Session</property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -491,6 +485,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="open_existing_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -504,6 +499,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_session" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -551,7 +547,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="existing_session_path">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </object>
@@ -562,17 +558,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Browse</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
+              <placeholder/>
             </child>
           </object>
           <packing>
@@ -597,9 +583,6 @@
   <object class="GtkDialog" id="pcap_overlay">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -616,6 +599,7 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="margin_left">117</property>
+                <signal name="clicked" handler="convert_pdml" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -631,6 +615,7 @@
                 <property name="receives_default">True</property>
                 <property name="margin_left">7</property>
                 <property name="margin_top">7</property>
+                <signal name="clicked" handler="pcap_close" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -649,7 +634,7 @@
           <object class="GtkHeaderBar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="title" translatable="yes">PCAP</property>
+            <property name="title">PCAP</property>
             <child>
               <placeholder/>
             </child>
@@ -701,7 +686,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="PCAP Entry">
+                  <object class="GtkEntry" id="pcap_file">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_left">12</property>
@@ -716,17 +701,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="pcap button">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -753,7 +728,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="dissector entry">
+                  <object class="GtkEntry" id="dissector">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="xalign">0.5</property>
@@ -766,18 +741,7 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="dissector button">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="margin_left">9</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
@@ -805,9 +769,6 @@
   <object class="GtkDialog" id="tag_overlay">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="can_focus">False</property>
@@ -836,6 +797,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_tag_overlay" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -1005,9 +967,6 @@ Description</property>
   <object class="GtkApplicationWindow" id="main_window">
     <property name="can_focus">False</property>
     <child>
-      <placeholder/>
-    </child>
-    <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1127,13 +1086,12 @@ Description</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid" id="stage_section">
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="valign">center</property>
             <property name="margin_top">10</property>
@@ -1158,6 +1116,7 @@ Description</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="stage_three_setup" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">2</property>
@@ -1170,6 +1129,7 @@ Description</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="stage_four_setup" swapped="no"/>
               </object>
               <packing>
                 <property name="left_attach">3</property>
@@ -1193,13 +1153,12 @@ Description</property>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="margin_bottom">10</property>
             <child>
@@ -1236,8 +1195,14 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="model">session_view_store</property>
+                        <property name="level_indentation">1</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="workspace_x">
+                            <property name="title" translatable="yes">Workspace X</property>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -1298,6 +1263,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="pdml_state_save_as" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1311,6 +1277,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="pdml_state_save" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1324,6 +1291,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="pdml_state_close" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1337,6 +1305,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="pdml_state_delete" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1362,6 +1331,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="pdml_state_rename" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1377,7 +1347,19 @@ Description</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkImage" id="state_machine">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">state-machine.jpg</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="filter_area">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
@@ -1434,6 +1416,7 @@ Description</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="filter_apply" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1447,6 +1430,7 @@ Description</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="filter_clear" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1460,6 +1444,7 @@ Description</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="filter_save" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1498,6 +1483,7 @@ Description</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
+                            <signal name="clicked" handler="saved_filter_apply" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1516,11 +1502,11 @@ Description</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="packet_area">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_top">5</property>
@@ -1593,6 +1579,7 @@ Description</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <signal name="clicked" handler="packet_remove" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1606,6 +1593,7 @@ Description</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
+                                <signal name="clicked" handler="packet_clear" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -1631,7 +1619,7 @@ Description</property>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
@@ -1662,7 +1650,6 @@ Description</property>
         <child>
           <object class="GtkGrid">
             <property name="visible">True</property>
-            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <child>
               <object class="GtkBox" id="tag_area_section">
@@ -1853,6 +1840,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="tag_area_update" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1866,6 +1854,7 @@ Description</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
+                        <signal name="clicked" handler="tag_area_cancel" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1969,7 +1958,7 @@ Description</property>
                     <property name="can_focus">True</property>
                     <property name="halign">end</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="new_tab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_left">8</property>
@@ -2191,7 +2180,7 @@ Value Pair(s): </property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="new_tab">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">New/Modify</property>
@@ -2202,7 +2191,7 @@ Value Pair(s): </property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="dependency_tab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">5</property>
@@ -2494,7 +2483,7 @@ on</property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="dependency_tab">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Dependency</property>
@@ -2505,7 +2494,7 @@ on</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="template_tab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">5</property>
@@ -2644,7 +2633,7 @@ Pair(s)</property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="template_tab">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Template</property>
@@ -2655,7 +2644,7 @@ Pair(s)</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="equivalency_tab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">5</property>
@@ -2839,7 +2828,7 @@ Pair(s)</property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="equivalency_tab">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Equivalency</property>
@@ -2850,7 +2839,7 @@ Pair(s)</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="generation_tab">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="margin_right">5</property>
@@ -3014,7 +3003,7 @@ Name</property>
                       </packing>
                     </child>
                     <child type="tab">
-                      <object class="GtkLabel" id="generation_tab">
+                      <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Generation</property>
@@ -3038,7 +3027,7 @@ Name</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="field_area_section">
+              <object class="GtkBox" id="field_area">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
@@ -3071,7 +3060,7 @@ Name</property>
                         <property name="vexpand">True</property>
                         <property name="model">field_area_list_store</property>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection"/>
+                          <object class="GtkTreeSelection" id="field_treeview"/>
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="field_area_selected"/>
@@ -3179,9 +3168,6 @@ Name</property>
   <object class="GtkDialog" id="workspace_launcher_overlay">
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
-    <child>
-      <placeholder/>
-    </child>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="visible">True</property>
@@ -3208,6 +3194,7 @@ Name</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="launch_workspace" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -3221,6 +3208,7 @@ Name</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <signal name="clicked" handler="close_workspace_launcher" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">True</property>
@@ -3278,7 +3266,7 @@ directory to store sessions.</property>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Workspace</property>
+                    <property name="label" translatable="yes">Full Workspace Path</property>
                     <property name="justify">right</property>
                   </object>
                   <packing>
@@ -3313,7 +3301,7 @@ Path</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dir">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Worspace Directory Path</property>
@@ -3324,7 +3312,7 @@ Path</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dest_name">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Destination 
@@ -3336,7 +3324,7 @@ Folder Name</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry">
+                  <object class="GtkEntry" id="workspace_dir_path">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="placeholder_text" translatable="yes">Destination Folder 
@@ -3344,30 +3332,6 @@ Path</property>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
-                    <property name="top_attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
-                    <property name="top_attach">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Browse</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                  </object>
-                  <packing>
-                    <property name="left_attach">2</property>
                     <property name="top_attach">2</property>
                   </packing>
                 </child>
@@ -3380,6 +3344,12 @@ Path</property>
                     <property name="left_attach">2</property>
                     <property name="top_attach">1</property>
                   </packing>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
               <packing>
