@@ -24,4 +24,4 @@ class StateMachine:
 	def generate(self):
 		A = to_agraph(self.graph)
 		A.layout('dot')
-		A.draw('dottest123.png')
+		A.draw('statemachine.png')
