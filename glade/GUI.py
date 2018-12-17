@@ -4,6 +4,7 @@ from gi.repository import Gtk
 import sys
 sys.path.append('../app/')
 from state_machine import StateMachine
+from tag import TagManager
 
 transitions = [(1,2),(2,3),(3,4),(4,5),(4,2)]
 t_comboboxes = []
@@ -12,6 +13,9 @@ class Handler:
 
     global builder
     
+    global tag_manager
+    global tag_store
+
     # New Session Code
     
     def new_session_overlay(self, button):
@@ -210,6 +214,39 @@ class Handler:
                             "transition_update",
                             "transition_list",
                             "equivalency_tab")
+        
+    def setup_filterarea(main_window):
+        layout = builder.get_object('filter_area_data')
+        main_window.add(layout)
+        
+    def filter_window(self, button):
+        setup_filterarea(builder.get_object('main_window'))
+        filter_area = builder.get_object('filter_area_data')
+        response = filter_area.run()
+        print(response)
+        filter_area.hide()
+        
+        
+        test_list = [("IPX only",  "ipx"),
+                 ("TCP only", "tcp"),
+                 ("UDP only", "udp"),
+                 ("Non-DNS", "Identifier: 0x809e", "!(udp.port == 53 || tcp.port == 53"),
+                 ("Ethernet Broadcast", "Sequence number: 0x0f00",  "Eth.addr == ff:ff:ff:ff:ff:ff")]
+        
+        
+        liststore = Gtk.ListStore(str, str)
+        
+        for test in test_list:
+            liststore.append(list(test))
+        
+        field_area = Gtk.TreeView(liststore)
+        
+        for i, column_title in enumerate(["Saved Filter", "Filter Expression"]):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+            field_area.append_column(column)
+        
+        layout.pack_start(field_area, True, True, 0)
 
     def pdml_state_save_as(self, button):
         print("pdml_state_save_as")
@@ -245,10 +282,36 @@ class Handler:
         print("packet_clear")
 
     def tag_area_update(self, button):
-        print("tag_area_update")
+        dialog = builder.get_object('tag_overlay')
+        response = dialog.run()
+        print(response)
+        dialog.hide()
 
+    def close_tag_overlay(self, button):
+        dialog = builder.get_object('tag_overlay')
+        dialog.hide()
+        
+    def save_tag(self, button):
+        tag_name = builder.get_object('tag name')
+        tag_field = builder.get_object('tag field')
+        tag_desc = builder.get_object('tag description')
+        tag_name = tag_name.get_text()
+        tag_field = tag_field.get_text()
+        tag_desc = tag_desc.get_text()
+        tag_manager.addTag(tag_name, tag_field, tag_desc)
+        dialog = builder.get_object('tag_overlay')
+        dialog.hide()
+        
     def tag_area_cancel(self, button):
         print("tag_area_cancel")
+        
+    def update_tags(self, combo):
+        tag_list = tag_manager.getTagList()
+        tag_store = Gtk.ListStore(str)
+        for tag in tag_list:
+            tag_store.append(tag[0])
+        tag_box = builder.get_object('tag_combo_box')
+        
 
         
     def add_session_tree(self, button):
@@ -275,6 +338,8 @@ class Handler:
         print("pressed")
 
 builder = Gtk.Builder()
+tag_manager = TagManager()
+tag_store = Gtk.ListStore(str, str, str)
 builder.add_from_file("UIFiles/NTBSG_Main.glade")
 
 
@@ -293,28 +358,30 @@ def multi_set_show(obj, show, *args):
 #    
 #for row in store:
 #    #Print values of all columns
-#    print(row[:])
-    
+#    print(row[:])    
+
+def setup_tag_combo(main_window):
+    tag_combo_box = Gtk.ComboBox.new_with_model(tag_store)
+    renderer_text = Gtk.CellRendererText()
+    tag_combo_box.pack_start(renderer_text, True)
+    tag_combo_box.add_attribute(renderer_text, "text", 0)
+    tag_combo_box.set_active(tag_manager.getTagList()))
+    box = builder.get_object('tag_combo')
+    box.pack_start(tag_combo_box, True, True, 0)
 
 def setup_fieldarea(main_window):
     layout = builder.get_object('field_area_data')
     main_window.add(layout)
     
     
-    test_list = [("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7),
-             ("Firefox", 1,  2, 3, 5, 6, 7)]
+    test_list = [("icmp.type", "Type 8 [Echo (ping) request]",  1, 34, 8, "08", 2),
+             ("icmp.code", "Code 0",  1, 35, 0x00, "00", 2),
+             ("icmp.checksum", "Checksum 0x6861 (correct)",  0x00, 36, 0x6861, "6861", 0),
+             ("icmp.ldent", "Identifier: 0x809e",  2, 38, 0x809e, "809e", 2),
+             ("icmp.seq", "Sequence number: 0x0f00",  2, 40, 0x0f00, "0f00", 2)]
     
     
-    liststore = Gtk.ListStore(str, int, int, int, int, int, int)
+    liststore = Gtk.ListStore(str, str, int, int, int, str, int)
     
     for test in test_list:
         liststore.append(list(test))
@@ -332,38 +399,78 @@ def setup_packetarea(main_window):
     layout = builder.get_object('packet_area_data')
     main_window.add(layout)
     
+    test_list = [["Frame 718: frame, eth, ip, tcp", ["Frame 718: 74 bytes on wire (592 bits), 74 bits captured (592 bits) on interface 0", 20],
+                                                    ["Ethernet II, Src: Elitegro_dd:12:cd (00:19:21:dd:12:cd), Dst: Broadcom_de:ad:05 (00:10:18:de:ad:05)", 25], 
+                                                    ["Internet Control Message Protocol", 25],
+                                                    ["Transmission Control Protocol, Src Port: 55394(55394), Dst Port: 80 (80), Seq: 0, Len: 0", 25]],
+         ["Frame 767: frame, eth, ip, tcp"],
+         ["Frame 768: frame, eth, ip, tcp"],
+         ["Frame 769: frame, eth, ip, tcp, http",]]
+         
     
-    test_list = [("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),
-             ("Firefox", 1),]
-    
-    
-    liststore = Gtk.ListStore(str, int)
-    
-    for test in test_list:
-        liststore.append(list(test))
-    
-    field_area = Gtk.TreeView(liststore)
-    
+    treestore = Gtk.TreeStore(str, int)
+        # fill in the model
+    for i in range(len(test_list)):
+        piter = treestore.append(None, [test_list[i][0], 74])
+        # append the books and the associated boolean value as children of
+        # the author
+        j = 1
+        while j < len(test_list[i]):
+            treestore.append(piter, test_list[i][j])
+            j += 1
+
+    # the treeview shows the model
+    # create a treeview on the model self.store
+    packet_area = Gtk.TreeView(treestore)    
+  
     for i, column_title in enumerate(["Packet", "Size"]):
         renderer = Gtk.CellRendererText()
         column = Gtk.TreeViewColumn(column_title, renderer, text=i)
-        field_area.append_column(column)
+        packet_area.append_column(column)
     
-    layout.pack_start(field_area, True, True, 0)
+    layout.pack_start(packet_area, True, True, 0)
+    
+
+def setup_sessionarea(main_window):
+    layout = builder.get_object('workspace_area')
+    main_window.add(layout)
+    
+    test_list = [["Session A", ["State 1"], ["State 2"]],
+         ["Session B", ["State 1"], ["State 2"]],
+         ["Session C", ["State 1"], ["State 2"]]]
+    
+    treestore = Gtk.TreeStore(str)
+        # fill in the model
+    for i in range(len(test_list)):
+        # the iter piter is returned when appending the author in the first column
+        # and False in the second
+        piter = treestore.append(None, [test_list[i][0]])
+        # append the books and the associated boolean value as children of
+        # the author
+        j = 1
+        while j < len(test_list[i]):
+            treestore.append(piter, test_list[i][j])
+            j += 1
+
+    # the treeview shows the model
+    # create a treeview on the model self.store
+    workspace = Gtk.TreeView(treestore)    
+    
+    # the cellrenderer for the first column - text
+    renderer_tree = Gtk.CellRendererText()
+    # the first column is created
+    column = Gtk.TreeViewColumn("Workspace X", renderer_tree, text=0)
+    # and it is appended to the treeview
+    workspace.append_column(column)
+    
+    layout.pack_start(workspace, True, True, 0)
             
 main_window = builder.get_object("main_window")
 
+setup_sessionarea(main_window)
 setup_fieldarea(main_window)
 setup_packetarea(main_window)
+setup_tag_combo(main_window)
 
 builder.connect_signals(Handler())
 ## multi_set_show(builder, False, 'label1', 'label2')
@@ -380,21 +487,6 @@ multi_set_show(builder, False,
                             "equivalency_tab",
                             "generation_tab",
                             "transition_update")
-
-
-
-
-# multi_set_show(builder, False,
-#                     "filter_area",
-#                     "packet_area",
-#                     "field_area_section",
-#                     "new_tab",
-#                     "dependency_tab",
-#                     "template_tab",
-#                     # #"state_machine_area",
-#                     "equivalency_tab",
-#                     "generation_tab")
-
 
 Gtk.main()
 
